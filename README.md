@@ -1,4 +1,4 @@
-![Topology Diagram](images/topology.png)
+![Topology Diagram]([images/topology.png](https://github.com/furkangurses/CCNA-Lab-Router-Interface-IP-Configuration-and-Verification/blob/main/4.PNG?raw=true)
 🎯 Lab Objective
 
 The objective of this lab is to configure IP addresses on Cisco router interfaces, enable those interfaces, and verify end-to-end connectivity between multiple networks using basic Layer 3 routing.
