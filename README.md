@@ -1,178 +1,307 @@
 ![Topology Diagram](https://github.com/furkangurses/CCNA-Lab-Router-Interface-IP-Configuration-and-Verification/blob/main/4.PNG?raw=true)
-🎯 Lab Objective
+# CCNA Lab – Basic Router Interface Configuration & Layer 3 Connectivity
+
+---
+
+## 🎯 Lab Objective
 
 The objective of this lab is to configure IP addresses on Cisco router interfaces, enable those interfaces, and verify end-to-end connectivity between multiple networks using basic Layer 3 routing.
 
-This lab demonstrates how a router connects different IP networks and acts as a default gateway for hosts.
+This lab demonstrates how a router:
 
-🌐 Topology Overview
+- Connects different IP networks  
+- Acts as a default gateway for hosts  
+- Enables inter-network communication  
 
-Devices:
+---
 
-1 Router (R1)
+## 🌐 Topology Overview
 
-3 Switches (SW1, SW2, SW3)
+### Devices
 
-3 PCs (PC1, PC2, PC3)
+- 1 Router (**R1**)  
+- 3 Switches (**SW1, SW2, SW3**)  
+- 3 PCs (**PC1, PC2, PC3**)  
 
-⚙️ Configuration Steps
+Each PC belongs to a different subnet connected to a separate router interface.
 
-1️⃣ Set Router Hostname
+---
 
-Enter privileged EXEC mode
+## ⚙️ Configuration Steps
 
-Enter global configuration mode
+---
 
-Change hostname to R1
+### 1️⃣ Set Router Hostname
 
-2️⃣ Verify Interfaces
-
-Use a show command to check interface status
-
-Observe that interfaces are administratively down by default
-
-3️⃣ Configure Router Interfaces
-
-For each interface:
-
-Enter interface configuration mode
-
-Assign IP address and subnet mask
-
-Add interface description
-
-Enable the interface using no shutdown
-
-4️⃣ Verify Interface Status
-
-Confirm interfaces show up/up state
-
-5️⃣ Save Configuration
-
-Save running configuration to startup configuration
-
-6️⃣ Configure PC IP Addresses
-
-Assign IP address and subnet mask manually
-
-Configure default gateway as the router interface IP
-
-7️⃣ Test Connectivity
-
-Use ping to verify inter-network communication
-
+```bash
 enable
-
 configure terminal
-
 hostname R1
+```
 
+---
+
+### 2️⃣ Verify Interfaces (Default State)
+
+```bash
 show ip interface brief
+```
 
+From configuration mode:
+
+```bash
 do show ip interface brief
+```
 
+🔎 Observation:
+
+- Interfaces are **administratively down** by default.
+
+---
+
+### 3️⃣ Configure Router Interfaces
+
+---
+
+#### Interface GigabitEthernet 0/0
+
+```bash
 interface gigabitethernet 0/0
-
 ip address 15.255.255.254 255.0.0.0
-
 description ## To SW1 ##
-
 no shutdown
+```
 
+---
+
+#### Interface GigabitEthernet 0/1
+
+```bash
 interface gigabitethernet 0/1
-
 ip address 182.98.255.254 255.255.0.0
-
 description ## To SW2 ##
-
 no shutdown
+```
 
+---
+
+#### Interface GigabitEthernet 0/2
+
+```bash
 interface gigabitethernet 0/2
-
 ip address 201.191.20.254 255.255.255.0
-
 description ## To SW3 ##
-
 no shutdown
+```
 
+---
+
+### 4️⃣ Exit Configuration Mode
+
+```bash
 end
+```
 
+---
+
+### 5️⃣ Verify Interface Status
+
+```bash
 show ip interface brief
+```
 
-show running-config
+✔ Interfaces should display:
 
+- **Status:** up  
+- **Protocol:** up  
+
+---
+
+### 6️⃣ Save Configuration
+
+```bash
 copy running-config startup-config
-
 write memory
+```
 
-🧠 Technical Explanation
+---
 
-This lab teaches fundamental Layer 3 routing principles.
+### 7️⃣ Configure PC IP Addresses
 
-Each router interface must belong to a different IP subnet. When hosts send traffic to another network, they forward it to their default gateway, which is the router interface.
+On each PC:
 
-The no shutdown command changes the administrative state of the interface from down to up, activating Layer 1.
+- Assign IP address manually  
+- Assign correct subnet mask  
+- Configure default gateway as the router interface IP  
 
-In show ip interface brief:
+---
 
-Status represents Layer 1 (physical layer)
+### 8️⃣ Test Connectivity
 
-Protocol represents Layer 2 (data link layer)
+From each PC:
 
-Saving the configuration ensures the router retains settings after a reboot.
+```bash
+ping <destination-ip>
+```
 
-🏢 Real-World Use Case
+Verify successful communication between different networks.
 
-This configuration reflects a small business network where different departments operate on separate subnets.
+---
 
-A router connects these subnets and enables communication between them.
+## 📝 Commands Used
 
-Without correct IP addressing and gateway configuration, devices in different networks cannot communicate.
-
-🛠️ Skills Gained
-
-Cisco IOS CLI navigation
-
-Router interface configuration
-
-IP addressing and subnet mask usage
-
-Understanding administrative vs operational interface states
-
-Default gateway logic
-
-Configuration verification
-
-Basic network troubleshooting
-
-🚀 Possible Improvements
-
-Add static routes between multiple routers
-
-Implement VLAN segmentation
-
-Configure DHCP instead of static IP assignment
-
-Add SSH for secure remote access
-
-Apply basic ACLs for traffic filtering
-
-Configure basic security settings
-
-🧩 Troubleshooting Notes
-
-If connectivity fails, check the following:
-
+```bash
+enable
+configure terminal
+hostname R1
 show ip interface brief
+do show ip interface brief
+interface gigabitethernet 0/0
+interface gigabitethernet 0/1
+interface gigabitethernet 0/2
+ip address
+description
+no shutdown
+end
+show running-config
+copy running-config startup-config
+write memory
+```
 
-Ensure interfaces are not administratively down
+---
 
-Verify correct subnet masks
+## 🧠 Technical Explanation
 
-Confirm correct default gateway configuration on PCs
+This lab demonstrates fundamental **Layer 3 routing principles**.
 
-Ensure IP addresses belong to the correct subnet
+### Key Concepts
 
-Verify physical connections in the topology
+- Each router interface must belong to a **different IP subnet**
+- Hosts send traffic destined for another network to their **default gateway**
+- The router forwards traffic between networks
 
-A common issue is forgetting the no shutdown command, which keeps the interface in an administratively down state.
+---
+
+### The `no shutdown` Command
+
+By default, router interfaces are:
+
+```
+administratively down
+```
+
+The command:
+
+```bash
+no shutdown
+```
+
+Changes the interface state from **down → up**, activating Layer 1.
+
+---
+
+### Understanding `show ip interface brief`
+
+```bash
+show ip interface brief
+```
+
+- **Status** → Layer 1 (Physical Layer)  
+- **Protocol** → Layer 2 (Data Link Layer)  
+
+Both must show **up/up** for proper operation.
+
+---
+
+### Saving Configuration
+
+Without saving:
+
+- Configuration is stored in **RAM**
+- All settings are lost after reboot  
+
+Saving writes configuration to **NVRAM**.
+
+---
+
+## 🌍 Real-World Use Case
+
+This configuration mirrors a small business network:
+
+- Different departments operate on separate subnets  
+- A router connects these subnets  
+- Inter-department communication depends on correct Layer 3 configuration  
+
+Without:
+
+- Proper IP addressing  
+- Correct subnet masks  
+- Correct default gateway  
+
+Devices in different networks cannot communicate.
+
+---
+
+## 🛠️ Skills Gained
+
+- Cisco IOS CLI navigation  
+- Router interface configuration  
+- IP addressing and subnet mask usage  
+- Understanding administrative vs operational interface states  
+- Default gateway logic  
+- Configuration verification  
+- Basic network troubleshooting  
+
+---
+
+## ⚡ Possible Improvements
+
+- Add static routes between multiple routers  
+- Implement VLAN segmentation  
+- Configure DHCP instead of static IP assignment  
+- Add SSH for secure remote access  
+- Apply basic ACLs for traffic filtering  
+- Configure additional security settings  
+
+---
+
+## 🧩 Troubleshooting Notes
+
+If connectivity fails, verify:
+
+```bash
+show ip interface brief
+```
+
+✔ Interfaces must NOT be administratively down  
+
+Check:
+
+- Correct subnet masks  
+- Correct default gateway on PCs  
+- IP addresses belong to correct subnet  
+- Physical connections in topology  
+
+⚠️ Common Issue:
+
+Forgetting:
+
+```bash
+no shutdown
+```
+
+This keeps the interface in an **administratively down** state, preventing communication.
+
+---
+
+## 📚 Conclusion
+
+This lab builds core Layer 3 knowledge required for:
+
+- CCNA-level networking  
+- IT Support roles  
+- Junior Network Engineer positions  
+
+Understanding interface states, IP addressing, and gateway logic is fundamental for real-world network troubleshooting.
+
+---
